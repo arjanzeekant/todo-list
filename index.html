@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="todo-list" class="container-fluid">
+        <div class="header">
+            <h1>{{ header.toUpperCase() }}</h1>
+            <button v-if="state === 'default'" class="btn btn-primary" v-on:click="changeState('edit')">Add
+                Item</button>
+            <button v-else class="btn btn-danger" v-on:click="changeState('default')">Cancel</button>
+        </div>
+        <div v-if="state === 'edit'" class="add-item-form">
+            <input v-model="newItem" type="text" placeholder="Add a new item" v-on:keyup.enter="saveItem">
+            <p>{{ characterCount }} / 200</p>
+            <button class="btn btn-primary" v-bind:disabled="newItem.length === 0" v-on:click="saveItem">Save
+                Item</button>
+        </div>
+        <ul>
+            <li v-for="item in reversedItems" :class="{done: item.done, priority: item.highPriority}"
+                v-on:click="toggleDone(item)">{{
+                item.label }}</li>
+        </ul>
+        <p v-if="items.length === 0">No items to shop</p>
+    </div>
+
+
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+        var todoList = new Vue({
+            el: '#todo-list',
+            data: {
+                state: 'default',
+                header: 'To-Do List App',
+                newItem: '',
+                items: [
+                    {
+                        label: "Get another Job",
+                        done: false,
+                        highPriority: true,
+                    },
+                    {
+                        label: "Start learning VueJS",
+                        done: true,
+                        highPriority: false,
+                    },
+                    {
+                        label: "Find a new apartment",
+                        done: false,
+                        highPriority: false,
+                    },
+                ],
+            },
+            computed: {
+                characterCount() {
+                    return this.newItem.length;
+                },
+                reversedItems() {
+                    return this.items.slice(0).reverse();
+                }
+            },
+            methods: {
+                saveItem: function () {
+                    this.items.push({
+                        label: this.newItem,
+                        purchased: false,
+                    });
+                    this.newItem = '';
+                },
+                changeState: function (newState) {
+                    this.state = newState;
+                    this.newItem = '';
+                },
+                toggleDone: function (item) {
+                    item.done = !item.done;
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
