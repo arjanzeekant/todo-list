@@ -71,7 +71,8 @@
                 saveItem: function () {
                     this.items.push({
                         label: this.newItem,
-                        purchased: false,
+                        done: false,
+                        highPriority: false,
                     });
                     this.newItem = '';
                 },
