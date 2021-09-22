@@ -24,14 +24,15 @@
             <button class="btn btn-primary" v-bind:disabled="newItem.length === 0" v-on:click="saveItem">Save
                 Item</button>
         </div>
+        <p>{{ itemsNumber() }} to-dos left</p>
         <ul>
             <li v-for="item in reversedItems" :class="{done: item.done, priority: item.highPriority}"
                 v-on:click="toggleDone(item)">{{
                 item.label }}</li>
         </ul>
-        <p v-if="items.length === 0">No items to shop</p>
+        <p v-if="items.length === 0">No to-do's.</p>
+        <p>Click to-do to mark as done or undone.</p>
     </div>
-
 
     <script src="https://unpkg.com/vue"></script>
     <script>
@@ -66,6 +67,7 @@
                 reversedItems() {
                     return this.items.slice(0).reverse();
                 }
+
             },
             methods: {
                 saveItem: function () {
@@ -82,6 +84,15 @@
                 },
                 toggleDone: function (item) {
                     item.done = !item.done;
+                },
+                itemsNumber: function () {
+                    let i = 0;
+                    for (item of this.items) {
+                        if (item.done === false) {
+                            i++;
+                        }
+                    }
+                    return i;
                 }
             }
         });
